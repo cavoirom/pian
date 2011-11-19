@@ -1,0 +1,6 @@
+
+Dependency:
+	Google Web Toolkit 2.4
+	Apache Lucene
+	SQLite
+	jQuery

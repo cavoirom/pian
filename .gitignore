@@ -3,5 +3,6 @@
 .settings
 test/*
 test-classes/*
+war/js/jquery.min.js
 war/WEB-INF/classes/*
 war/WEB-INF/lib/*
