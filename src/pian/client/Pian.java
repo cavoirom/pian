@@ -3,6 +3,7 @@ package pian.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,7 +30,7 @@ public class Pian implements EntryPoint {
 	private CheckBox allOptionCheckBox = new CheckBox("Tất cả");
 	private CheckBox titleCheckBox = new CheckBox("Bài hát");
 	private CheckBox artistCheckBox = new CheckBox("Ca sĩ");
-	private CheckBox albumCheckBox = new CheckBox("Album/Playlist");
+	private CheckBox albumCheckBox = new CheckBox("Album");
 	private Image backgroundImage = new Image();
 	private Image logoImage = new Image();
 	private DockPanel searchPanel = new DockPanel();
@@ -36,7 +38,7 @@ public class Pian implements EntryPoint {
 	private DockPanel optionPanel = new DockPanel();
 	
 	private DockPanel resultPanel = new DockPanel();
-	private TabLayoutPanel songPanel = new TabLayoutPanel(30, Unit.PX);
+	private TabPanel songPanel = new TabPanel();
 	private VerticalPanel allResultPanel = new VerticalPanel();
 	private VerticalPanel songResultPanel = new VerticalPanel();
 	private VerticalPanel artistResultPanel = new VerticalPanel();
@@ -54,8 +56,11 @@ public class Pian implements EntryPoint {
 		
 		searchBox.setWidth("300px");
 		
+		searchButton.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+		
 		// add searchBox and searchButton to its panel.
 		controlPanel.setBorderWidth(0);
+		controlPanel.setWidth("400px");
 		controlPanel.add(searchBox);
 		controlPanel.add(searchButton);
 		
@@ -72,13 +77,11 @@ public class Pian implements EntryPoint {
 		searchPanel.add(optionPanel, DockPanel.EAST);
 		/* render full search box. */
 		
-		allResultPanel.setSpacing(5);
-		
 		/* Test result panel */
 		playerPanel.add(new HTML("This is Player Panel"));
-		//
+		allResultPanel.setSpacing(5);
 		allResultPanel.add(renderCellPanel("id001", "Làm Ơn", "Trần Trung Đức", "ab001", "Đang cập nhật"));
-		allResultPanel.add(renderCellPanel("id001", "Vài Lần Đón Đưa", "Đang cập nhật", "ab001", "Lê Hiếu"));
+		allResultPanel.add(renderCellPanel("id001", "Vài Lần Đón Đưa", "Lê Hiếu", "ab001", "Đang cập nhật"));
 		/* Test result panel */
 		
 		/* render result box. */
@@ -86,10 +89,10 @@ public class Pian implements EntryPoint {
 		songPanel.add(allResultPanel, "Tất cả");
 		songPanel.add(songResultPanel, "Tựa đề");
 		songPanel.add(artistResultPanel, "Ca sĩ");
-		songPanel.add(albumResultPanel, "Album/Playlist");
+		songPanel.add(albumResultPanel, "Album");
 		songPanel.selectTab(0);
 		
-		playerPanel.setPixelSize(280, 80);
+		playerPanel.setPixelSize(280, 30);
 		
 		playlistPanel.setWidth("280px");
 		playlistPanel.add(playlistLabel);
@@ -120,7 +123,7 @@ public class Pian implements EntryPoint {
 
 	private DockPanel renderCellPanel(String id, String songTitle, String artist, String albumId, String album) {
 		Label titleAndArtistLabel = new Label(songTitle + " - " + artist);
-		Label albumNameLabel = new Label(album);
+		Label albumNameLabel = new Label("Album: " + album);
 		
 		VerticalPanel songInfoPanel = new VerticalPanel();
 		songInfoPanel.setWidth("500px");
@@ -137,7 +140,7 @@ public class Pian implements EntryPoint {
 		songOperationPanel.add(downloadLabel);
 		
 		DockPanel cellPanel = new DockPanel();
-		cellPanel.setSize("100%", "60px");
+		cellPanel.setWidth("100%");
 		cellPanel.add(songInfoPanel, DockPanel.WEST);
 		cellPanel.add(songOperationPanel, DockPanel.EAST);
 		
