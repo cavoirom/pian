@@ -1,8 +1,11 @@
 .classpath
 .project
 .settings
+gwt-unitCache
 test/*
 test-classes/*
 war/js/jquery.min.js
+war/pian
 war/WEB-INF/classes/*
+war/WEB-INF/deploy
 war/WEB-INF/lib/*
