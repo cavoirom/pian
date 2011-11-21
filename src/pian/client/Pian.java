@@ -31,9 +31,9 @@ public class Pian implements EntryPoint {
 	private CheckBox albumCheckBox = new CheckBox("Album/Playlist");
 	private Image backgroundImage = new Image();
 	private Image logoImage = new Image();
-	private AbsolutePanel searchPanel = new AbsolutePanel();
+	private DockPanel searchPanel = new DockPanel();
 	private HorizontalPanel controlPanel = new HorizontalPanel();
-	private HorizontalPanel optionPanel = new HorizontalPanel();
+	private DockPanel optionPanel = new DockPanel();
 	
 	private DockPanel resultPanel = new DockPanel();
 	private TabLayoutPanel songPanel = new TabLayoutPanel(30, Unit.PX);
@@ -50,6 +50,7 @@ public class Pian implements EntryPoint {
 	public void onModuleLoad() {
 		/* render full search box. */
 		logoImage.setUrl("images/logo.jpg");
+		logoImage.setSize("115px", "110px");
 		
 		searchBox.setWidth("300px");
 		
@@ -59,28 +60,29 @@ public class Pian implements EntryPoint {
 		controlPanel.add(searchButton);
 		
 		// add options to its panel.
-		optionPanel.setBorderWidth(0);
-		optionPanel.add(allOptionCheckBox);
-		optionPanel.add(titleCheckBox);
-		optionPanel.add(artistCheckBox);
-		optionPanel.add(albumCheckBox);
+		optionPanel.add(controlPanel, DockPanel.NORTH);
+		optionPanel.add(allOptionCheckBox, DockPanel.WEST);
+		optionPanel.add(titleCheckBox, DockPanel.WEST);
+		optionPanel.add(artistCheckBox, DockPanel.WEST);
+		optionPanel.add(albumCheckBox, DockPanel.WEST);
 		
 		// Associate the logoImage, controlPanel, optionPanel with the searchPanel.
-		searchPanel.add(logoImage);
-		searchPanel.add(controlPanel);
-		searchPanel.add(optionPanel);
+		searchPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		searchPanel.add(logoImage, DockPanel.WEST);
+		searchPanel.add(optionPanel, DockPanel.EAST);
 		/* render full search box. */
+		
+		allResultPanel.setSpacing(5);
 		
 		/* Test result panel */
 		playerPanel.add(new HTML("This is Player Panel"));
 		//
-		allResultPanel.add(renderCellPanel("id001", "Làm Ơn", "Đang cập nhật", "ab001", "Trần Trung Đức"));
+		allResultPanel.add(renderCellPanel("id001", "Làm Ơn", "Trần Trung Đức", "ab001", "Đang cập nhật"));
 		allResultPanel.add(renderCellPanel("id001", "Vài Lần Đón Đưa", "Đang cập nhật", "ab001", "Lê Hiếu"));
 		/* Test result panel */
 		
 		/* render result box. */
 		songPanel.setWidth("700px");
-		songPanel.setHeight("100%");
 		songPanel.add(allResultPanel, "Tất cả");
 		songPanel.add(songResultPanel, "Tựa đề");
 		songPanel.add(artistResultPanel, "Ca sĩ");
@@ -121,7 +123,7 @@ public class Pian implements EntryPoint {
 		Label albumNameLabel = new Label(album);
 		
 		VerticalPanel songInfoPanel = new VerticalPanel();
-		songInfoPanel.setWidth("540px");
+		songInfoPanel.setWidth("500px");
 		songInfoPanel.add(titleAndArtistLabel);
 		songInfoPanel.add(albumNameLabel);
 		
@@ -135,7 +137,7 @@ public class Pian implements EntryPoint {
 		songOperationPanel.add(downloadLabel);
 		
 		DockPanel cellPanel = new DockPanel();
-		cellPanel.setWidth("100%");
+		cellPanel.setSize("100%", "60px");
 		cellPanel.add(songInfoPanel, DockPanel.WEST);
 		cellPanel.add(songOperationPanel, DockPanel.EAST);
 		
