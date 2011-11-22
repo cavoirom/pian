@@ -14,4 +14,13 @@ public class Album {
 		this.artist = artist;
 		this.songs = songs;
 	}
+
+	public Artist getArtist() {
+		return artist;
+	}
+
+	public void setArtist(Artist artist) {
+		this.artist = artist;
+	}
+	
 }
