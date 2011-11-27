@@ -1,11 +1,13 @@
 package pian.model.dao;
 
+import pian.model.Artist;
+
 public interface ArtistDAO {
-	public void storeArtist(ArtistDAO a);
+	public boolean storeArtist(Artist a);
 	
-	public ArtistDAO loadArtist(int id);
+	public Artist loadArtist(int id);
 	
 	public boolean deleteArtist(int id);
 	
-	public boolean deleteArtist(ArtistDAO a);
+	public boolean deleteArtist(Artist a);
 }
