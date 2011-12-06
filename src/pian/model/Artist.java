@@ -16,6 +16,10 @@ public class Artist {
 		this.songs = songs;
 	}
 
+	public Artist() {
+		
+	}
+
 	public int getId() {
 		return id;
 	}

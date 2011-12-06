@@ -46,7 +46,7 @@ public class SongDAOImpl implements SongDAO{
 				Album album = new Album();
 				album.setId(result.getInt("AlbumID"));
 				
-				Artist artist = new Artist(null);
+				Artist artist = new Artist();
 				artist.setId(result.getInt("ArtistID"));
 				
 				song = new Song();
