@@ -41,9 +41,21 @@ public class SongDAOImpl implements SongDAO{
 			String sql = "SELECT * FROM Song WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
-			ResultSet set = statement.executeQuery();
-			if (set.next()){
-				song = readSong(set, 0);
+			ResultSet result = statement.executeQuery();
+			if (result.next()){
+				Album album = new Album();
+				album.setId(result.getInt("AlbumID"));
+				
+				Artist artist = new Artist(null);
+				artist.setId(result.getInt("ArtistID"));
+				
+				song = new Song();
+				song.setId(result.getInt("ID"));
+				song.setLink(result.getString("Link"));
+				song.setTitle(result.getString("Title"));
+				
+				song.setAlbum(album);
+				song.setArtist(artist);
 			}
 			statement.close();
 			connection.close();
