@@ -173,7 +173,7 @@ public class Pian implements EntryPoint {
 	public static native void renderPlayer() /*-{
 		$wnd.jwplayer("mainPlayer").setup({
 			flashplayer: "/player/player.swf",
-			file: "http://stream3.mp3.zdn.vn/ES3stAYFQh/452b03c7ccc92e8bc7b50838207651e2/4eccceb0/2011/11/22/5/2/52e7b9a0ee8627037ca3a2a8235012fe.mp3",
+			//file: "http://stream3.mp3.zdn.vn/ES3stAYFQh/452b03c7ccc92e8bc7b50838207651e2/4eccceb0/2011/11/22/5/2/52e7b9a0ee8627037ca3a2a8235012fe.mp3",
 			controlbar: "bottom",
 			width: 270,
 			height: 24,
@@ -181,7 +181,7 @@ public class Pian implements EntryPoint {
 	}-*/;
 	
 	public static native void playSong(String url) /*-{
-		//$wnd.jwplayer("mainPlayer").load(url);
+		$wnd.jwplayer("mainPlayer").load(url);
 		$wnd.jwplayer("mainPlayer").play();
 		//alert(url);
 	}-*/;
