@@ -12,7 +12,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 
 	@Override
 	public boolean storeAlbum(Album a) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "INSERT INTO Song (ArtistID, Name) VALUES(?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -30,7 +30,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 
 	@Override
 	public Album loadAlbum(int id) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		Album album = null;
 		try {
 			String sql = "SELECT * FROM Album WHERE ID = ?;";
@@ -50,7 +50,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 
 	@Override
 	public boolean deleteAlbum(int id) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "DELETE FROM Album WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);

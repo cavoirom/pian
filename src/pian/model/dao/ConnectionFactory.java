@@ -8,7 +8,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class Connect {
+public class ConnectionFactory {
 	
 	public static Connection getConnection(){
 		Connection connection = null;
@@ -29,9 +29,5 @@ public class Connect {
 		} 
 		
 		return connection;
-	}
-	public static void main(String[] args) {
-		System.out.println("Asdfasdf");
-		System.out.println(new Connect().getConnection());
 	}
 }

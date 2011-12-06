@@ -11,7 +11,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 
 	@Override
 	public boolean storeArtist(Artist a) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "INSERT INTO Song (Name) VALUES(?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -28,7 +28,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 
 	@Override
 	public Artist loadArtist(int id) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
 			String sql = "SELECT * FROM Artist WHERE ID = ?;";
@@ -48,7 +48,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 
 	@Override
 	public boolean deleteArtist(int id) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "DELETE FROM Artist WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -72,7 +72,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 
 
 	public Artist loadArtist(String name, int detail) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
 			String sql = "SELECT * FROM Artist WHERE Name = ?;";

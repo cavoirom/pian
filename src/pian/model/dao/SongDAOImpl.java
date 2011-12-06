@@ -15,7 +15,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public boolean storeDAO(Song s) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "INSERT INTO Song (Title, Link, AlbumID, ArtistID) VALUES(?,?,?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -35,7 +35,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public Song loadSong(int id) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		Song song = null;
 		try {
 			String sql = "SELECT * FROM Song WHERE ID = ?;";
@@ -56,7 +56,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public boolean deleteSong(int id) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "DELETE FROM Song WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -97,7 +97,7 @@ public class SongDAOImpl implements SongDAO{
 
 
 	public List<Song> getSongsByArtist(String artistName) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			String sql = "SELECT * FROM Song WHERE AlbumID = ?;";
@@ -117,7 +117,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public List<Song> getSongsByAlbum(int albumID, int numberResult, int page) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			String sql = "SELECT * FROM Song WHERE AlbumID = ?";
@@ -137,7 +137,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public List<Song> getSongsByArtist(int artistID, int numberResult, int page) {
-		Connection connection = Connect.getConnection();
+		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			String sql = "SELECT * FROM Song WHERE ArtistID = ?";
