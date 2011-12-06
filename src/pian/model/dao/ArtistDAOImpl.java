@@ -28,6 +28,10 @@ public class ArtistDAOImpl implements ArtistDAO{
 
 	@Override
 	public Artist loadArtist(int id) {
+		return addSongs(loadArtistNoSongs(id));
+	}
+	
+	public Artist loadArtistNoSongs(int id) {
 		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
@@ -36,7 +40,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 			statement.setInt(1, id);
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
-				artist = readArtist(set, 0);
+				artist = readArtist(set);
 			}
 			statement.close();
 			connection.close();
@@ -71,7 +75,11 @@ public class ArtistDAOImpl implements ArtistDAO{
 	}
 
 
-	public Artist loadArtist(String name, int detail) {
+	public Artist loadArtist(String name) {
+		return addSongs(loadArtist(name));
+	}
+	
+	public Artist loadArtistNoSongs(String name) {
 		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
@@ -80,32 +88,29 @@ public class ArtistDAOImpl implements ArtistDAO{
 			statement.setString(1, name);
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
-				readArtist(set, detail);
+				readArtist(set);
 			}
 			statement.close();
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return artist;
 	}
 	
-	private Artist readArtist(ResultSet set, int detail) throws SQLException{
-		// 0 : All field in Artist (Default)
-		// 1 : Not songs
+	private Artist readArtist(ResultSet set) throws SQLException{
 		int id = set.getInt("ID");
 		String name = set.getString("Name");
 		Artist artist = new Artist(name);
 		artist.setId(id);
-		if (detail == 0){
-			artist.setSongs(new SongDAOImpl().getSongsByArtist(id, 20, 1));
-		}
 		return artist;
 	}
 
-	public Artist loadArtist(String name) {
-		return loadArtist(name, 0);
+	private Artist addSongs(Artist artist){
+		if (artist == null)
+			return null;
+		artist.setSongs(new SongDAOImpl().getSongsByArtist(artist.getId(), 20, 1));
+		return artist;
 	}
 
 }

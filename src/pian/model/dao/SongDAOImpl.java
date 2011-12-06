@@ -43,26 +43,13 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(1, id);
 			ResultSet result = statement.executeQuery();
 			if (result.next()){
-				Album album = new Album();
-				album.setId(result.getInt("AlbumID"));
-				
-				Artist artist = new Artist();
-				artist.setId(result.getInt("ArtistID"));
-				
-				song = new Song();
-				song.setId(result.getInt("ID"));
-				song.setLink(result.getString("Link"));
-				song.setTitle(result.getString("Title"));
-				
-				song.setAlbum(album);
-				song.setArtist(artist);
+				song = readSongAll(result);
 			}
 			statement.close();
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return song;
 	}
 
@@ -107,26 +94,6 @@ public class SongDAOImpl implements SongDAO{
 		return null;
 	}
 
-
-	public List<Song> getSongsByArtist(String artistName) {
-		Connection connection = ConnectionFactory.getConnection();
-		List<Song> songs = new ArrayList<Song>();
-		try {
-			String sql = "SELECT * FROM Song WHERE AlbumID = ?;";
-			PreparedStatement statement = connection.prepareStatement(sql);
-//			statement.setInt(1, albumID);
-			ResultSet set = statement.executeQuery();
-			while (set.next()){
-				songs.add(readSong(set, 0));
-			}
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return songs;
-	}
-
 	@Override
 	public List<Song> getSongsByAlbum(int albumID, int numberResult, int page) {
 		Connection connection = ConnectionFactory.getConnection();
@@ -137,7 +104,7 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(1, albumID);
 			ResultSet set = statement.executeQuery();
 			while (set.next()){
-				songs.add(readSong(set, 0));
+				songs.add(readSongAll(set));
 			}
 			statement.close();
 			connection.close();
@@ -157,7 +124,7 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(1, artistID);
 			ResultSet set = statement.executeQuery();
 			while (set.next()){
-				songs.add(readSong(set, 0));
+				songs.add(readSongAll(set));
 			}
 			statement.close();
 			connection.close();
@@ -167,29 +134,39 @@ public class SongDAOImpl implements SongDAO{
 		return songs;
 	}
 	
-	private Song readSong(ResultSet set, int detail) throws SQLException{
-		// 0 : All field in Song (Default)
-		// 1 : Have Artist and Album but not detail
-		// 2 : Not Artist and Album
+	private Song readSongAll(ResultSet set) throws SQLException{
+		Song song = readSong(set);
+		Album album = new Album();
+		album.setId(set.getInt("AlbumID"));
+		Artist artist = new Artist();
+		artist.setId(set.getInt("ArtistID"));
+		song.setArtist(artist);
+		song.setAlbum(album);
+		return song;
+	}
+	
+	private Song readSongHasAlbum(ResultSet set) throws SQLException{
+		Song song = readSong(set);
+		Album album = new Album();
+		album.setId(set.getInt("AlbumID"));
+		song.setAlbum(album);
+		return song;
+	}
+	
+	private Song readSongHasArtist(ResultSet set) throws SQLException{
+		Song song = readSong(set);
+		Artist artist = new Artist();
+		artist.setId(set.getInt("ArtistID"));
+		song.setArtist(artist);
+		return song;
+	}
+	
+	private Song readSong(ResultSet set) throws SQLException{
 		int id = set.getInt("ID");
 		String title = set.getString("Title");
 		String link = set.getString("Link");
-		int albumID = set.getInt("AlbumID");
-		int artistID = set.getInt("ArtistID");
 		Song song = new Song(title, link);
 		song.setId(id);
-		if (detail == 0){
-			Artist artist = new ArtistDAOImpl().loadArtist(artistID);
-			Album album = new AlbumDAOImpl().loadAlbum(albumID);
-			song.setArtist(artist);
-			song.setAlbum(album);
-		}
-		if (detail == 1){
-			Artist artist = new ArtistDAOImpl().loadArtist(artistID);
-			Album album = new AlbumDAOImpl().loadAlbum(albumID);
-			song.setArtist(artist);
-			song.setAlbum(album);
-		}
 		return song;
 	}
 

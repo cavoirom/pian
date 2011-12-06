@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import pian.model.Album;
-import pian.model.Artist;
 
 public class AlbumDAOImpl implements AlbumDAO{
 
@@ -30,6 +29,10 @@ public class AlbumDAOImpl implements AlbumDAO{
 
 	@Override
 	public Album loadAlbum(int id) {
+		return addSongs(loadAlbum(id));
+	}
+	
+	public Album loadAlbumNoSongs(int id) {
 		Connection connection = ConnectionFactory.getConnection();
 		Album album = null;
 		try {
@@ -38,7 +41,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 			statement.setInt(1, id);
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
-				album = readAlbum(set, 0);
+				album = readAlbum(set);
 			}
 			statement.close();
 			connection.close();
@@ -72,16 +75,18 @@ public class AlbumDAOImpl implements AlbumDAO{
 		return deleteAlbum(a.getId());
 	}
 	
-	private Album readAlbum(ResultSet set, int detail) throws SQLException{
-		// 0 : All field in Artist (Default)
-		// 1 : Not songs
+	private Album readAlbum(ResultSet set) throws SQLException{
 		int id = set.getInt("ID");
 		String name = set.getString("Name");
 		Album album = new Album(name);
 		album.setId(id);
-		if (detail == 0){
-			album.setSongs(new SongDAOImpl().getSongsByAlbum(id, 20, 1));
-		}
+		return album;
+	}
+	
+	private Album addSongs(Album album){
+		if (album == null)
+			return null;
+		album.setSongs(new SongDAOImpl().getSongsByAlbum(album.getId(), 20, 1));
 		return album;
 	}
 }
