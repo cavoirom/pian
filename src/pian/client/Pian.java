@@ -1,7 +1,5 @@
 package pian.client;
 
-import java.util.Iterator;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;

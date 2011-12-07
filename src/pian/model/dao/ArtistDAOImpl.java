@@ -121,9 +121,9 @@ public class ArtistDAOImpl implements ArtistDAO{
 		Connection connection = ConnectionFactory.getConnection();
 		List<Artist> artists = new ArrayList<Artist>();
 		try {
-			String sql = "SELECT * FROM Artist WHERE Name LIKE %?%;";
+			String sql = "SELECT * FROM Artist WHERE Name LIKE ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, name);
+			statement.setString(1, "%" + name + "%");
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
 				artists.add(readArtist(set));
@@ -144,7 +144,6 @@ public class ArtistDAOImpl implements ArtistDAO{
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, name);
 			ResultSet set = statement.executeQuery();
-			System.out.println(set.next());
 			if (set.next()){
 				artist = readArtist(set);
 			}

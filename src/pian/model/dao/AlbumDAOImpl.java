@@ -99,9 +99,9 @@ public class AlbumDAOImpl implements AlbumDAO{
 		Connection connection = ConnectionFactory.getConnection();
 		List<Album> albums = new ArrayList<Album>();
 		try {
-			String sql = "SELECT * FROM Album WHERE Name LIKE %?%;";
+			String sql = "SELECT * FROM Album WHERE Name LIKE ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, name);
+			statement.setString(1, "%" + name + "%");
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
 				albums.add(readAlbum(set));

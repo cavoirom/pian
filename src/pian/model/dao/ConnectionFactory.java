@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class ConnectionFactory {
@@ -16,8 +15,9 @@ public class ConnectionFactory {
 		try {
 			ctx = new InitialContext();
 			Context envContext  = (Context)ctx.lookup("java:/comp/env"); 
-			DataSource ds = (DataSource)envContext.lookup("jdbc/PianDB"); 
-		} catch (NamingException e) {
+			DataSource ds = (DataSource)envContext.lookup("jdbc/PianDB");
+			connection = ds.getConnection();
+		} catch (Exception e) {
 //			System.out.println("Can't connect as connection pool. System will create a normal connection.");
 			try {
 				Class.forName("org.sqlite.JDBC");
@@ -27,7 +27,6 @@ public class ConnectionFactory {
 			}
 		    
 		} 
-		
 		return connection;
 	}
 }

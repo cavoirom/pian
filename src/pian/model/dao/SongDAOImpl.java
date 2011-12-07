@@ -189,9 +189,9 @@ public class SongDAOImpl implements SongDAO{
 		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
-			String sql = "SELECT * FROM Song WHERE Title LIKE '%?%'";
+			String sql = "SELECT * FROM Song WHERE Title LIKE ?";
 			PreparedStatement statement = connection.prepareStatement(sqlWithLimit(sql, numberResult, page));
-			statement.setString(1, name);
+			statement.setString(1, "%" + name + "%");
 			ResultSet set = statement.executeQuery();
 			while (set.next()){
 				songs.add(readSongAll(set));
@@ -215,7 +215,7 @@ public class SongDAOImpl implements SongDAO{
 				if (songs.size() < sumSongs){
 					songs.addAll(getSongsByArtist(artist, -1, 1));
 				}else{
-					songs = songs.subList((sumSongs - numberResult), numberResult);
+					songs = songs.subList((sumSongs - numberResult - 1), numberResult);
 					break;
 				}
 			}
@@ -234,7 +234,7 @@ public class SongDAOImpl implements SongDAO{
 				if (songs.size() < sumSongs){
 					songs.addAll(getSongsByAlbum(album, -1, 1));
 				}else{
-					songs = songs.subList((sumSongs - numberResult), numberResult);
+					songs = songs.subList((sumSongs - numberResult - 1), numberResult);
 					break;
 				}
 			}
