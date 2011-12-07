@@ -8,9 +8,11 @@ public class Test {
 	public static void main(String[] args) {
 		Artist artist = new Artist("artist 1");
 		Album album =  new Album("album1");
+		album.setArtist(artist);
 		Song song = new Song("Title 1", artist, "Cộng hòa xã hội chủ nghĩa", album);
-//		System.out.println(new SongDAOImpl().storeDAO(song));
-		System.out.println(new SongDAOImpl().loadSong(3).getLink());
+		System.out.println(new SongDAOImpl().storeDAO(song));
+		System.out.println(new SongDAOImpl().loadSong(1).getLink());
+		System.out.println(new SongDAOImpl().loadSong(1).getAlbum().getName());
 		
 	}
 }

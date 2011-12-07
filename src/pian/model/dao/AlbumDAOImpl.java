@@ -13,9 +13,12 @@ public class AlbumDAOImpl implements AlbumDAO{
 
 	@Override
 	public boolean storeAlbum(Album a) {
+		if (existAlbum(a) || a == null)
+			return false;
+		new ArtistDAOImpl().storeArtist(a.getArtist());
 		Connection connection = ConnectionFactory.getConnection();
 		try {
-			String sql = "INSERT INTO Song (ArtistID, Name) VALUES(?,?);";
+			String sql = "INSERT INTO Album (ArtistID, Name) VALUES(?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, a.getArtist().getId());
 			statement.setString(2, a.getName());
@@ -109,5 +112,29 @@ public class AlbumDAOImpl implements AlbumDAO{
 			e.printStackTrace();
 		}
 		return albums;
+	}
+	
+	public Album getAlbumByName(String name){
+		Connection connection = ConnectionFactory.getConnection();
+		Album album = null;
+		try {
+			String sql = "SELECT * FROM Album WHERE Name = ?;";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			ResultSet set = statement.executeQuery();
+			if (set.next()){
+				album = readAlbum(set);
+			}
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return album;
+	}
+	
+	private boolean existAlbum(Album album){
+		if (album == null) return false;
+		return (getAlbumByName(album.getName()) != null);
 	}
 }

@@ -15,14 +15,19 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public boolean storeDAO(Song s) {
+		if (s == null) return false;
+		new ArtistDAOImpl().storeArtist(s.getArtist());
+		new AlbumDAOImpl().storeAlbum(s.getAlbum());
+		int albumID = new AlbumDAOImpl().getAlbumByName(s.getAlbum().getName()).getId();
+		int artistID = new ArtistDAOImpl().getArtistByName(s.getArtist().getName()).getId();
 		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "INSERT INTO Song (Title, Link, AlbumID, ArtistID) VALUES(?,?,?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, s.getTitle());
 			statement.setString(2, s.getLink());
-			statement.setInt(3, s.getAlbum().getId());
-			statement.setInt(4, s.getArtist().getId());
+			statement.setInt(3, albumID);
+			statement.setInt(4, artistID);
 			statement.executeUpdate();
 			statement.close();
 			connection.close();
@@ -50,7 +55,7 @@ public class SongDAOImpl implements SongDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return song;
+		return addDetails(song);
 	}
 
 	@Override
@@ -134,6 +139,14 @@ public class SongDAOImpl implements SongDAO{
 		artist.setId(set.getInt("ArtistID"));
 		song.setArtist(artist);
 		song.setAlbum(album);
+		return song;
+	}
+	
+	private Song addDetails(Song song){
+		if (song == null)
+			return null;
+		song.setAlbum(new AlbumDAOImpl().loadAlbumNoSongs(song.getAlbum().getId()));
+		song.setArtist(new ArtistDAOImpl().loadArtistNoSongs(song.getArtist().getId()));
 		return song;
 	}
 	

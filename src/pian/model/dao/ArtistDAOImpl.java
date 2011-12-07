@@ -7,16 +7,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import pian.model.Album;
 import pian.model.Artist;
 
 public class ArtistDAOImpl implements ArtistDAO{
 
 	@Override
 	public boolean storeArtist(Artist a) {
+		if (existArtist(a) || a == null)
+			return false;
 		Connection connection = ConnectionFactory.getConnection();
 		try {
-			String sql = "INSERT INTO Song (Name) VALUES(?);";
+			String sql = "INSERT INTO Artist (Name) VALUES(?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, a.getName());
 			statement.executeUpdate();
@@ -134,5 +135,29 @@ public class ArtistDAOImpl implements ArtistDAO{
 		}
 		return artists;
 	}
-
+	
+	public Artist getArtistByName(String name){
+		Connection connection = ConnectionFactory.getConnection();
+		Artist artist = null;
+		try {
+			String sql = "SELECT * FROM Artist WHERE Name = ?;";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			ResultSet set = statement.executeQuery();
+			System.out.println(set.next());
+			if (set.next()){
+				artist = readArtist(set);
+			}
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return artist;
+	}
+	
+	private boolean existArtist(Artist artist){
+		if (artist == null) return false;
+		return (getArtistByName(artist.getName()) != null);
+	}
 }
