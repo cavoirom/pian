@@ -16,4 +16,10 @@ public interface SongDAO {
 	public List<Song> getSongsByAlbum(int albumID, int numberResult, int page);
 	
 	public List<Song> getSongsByArtist(int artistID, int numberResult, int page);
+	
+	public List<Song> findSongsByAlbumName(String name, int numberResult, int page);
+	
+	public List<Song> findSongsByArtistName(String name, int numberResult, int page);
+	
+	public List<Song> findSongsByTitle(String name, int numberResult, int page);
 }

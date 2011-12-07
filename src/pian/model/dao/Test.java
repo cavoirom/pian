@@ -14,7 +14,6 @@ public class Test {
 		System.out.println(new SongDAOImpl().loadSong(1).getLink());
 		System.out.println(new SongDAOImpl().loadSong(1).getAlbum().getName());
 		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getTitle());
-		System.out.println(new SongDAOImpl().findSongsByArtistName("artist", 1, 1).get(0).getLink());
-		
+		System.out.println(new SongDAOImpl().findSongsByArtistName("artist", 1, 1).get(0).getArtist().getName());
 	}
 }

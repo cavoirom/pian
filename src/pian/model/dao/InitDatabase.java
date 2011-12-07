@@ -20,7 +20,9 @@ public class InitDatabase {
 	    stat.addBatch(tableSong);
 	    stat.addBatch(tableArtist);
 	    stat.addBatch(tableAlbum);
+	    connection.setAutoCommit(false);
 	    stat.executeBatch();
+	    connection.commit();
 	    stat.close();
 	    connection.close();
 	    System.out.println("-------------Done---------------");

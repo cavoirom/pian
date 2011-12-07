@@ -108,7 +108,7 @@ public class SongDAOImpl implements SongDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return songs;
+		return addDetails(songs);
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class SongDAOImpl implements SongDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return songs;
+		return addDetails(songs);
 	}
 	
 	private Song readSongAll(ResultSet set) throws SQLException{
@@ -148,6 +148,14 @@ public class SongDAOImpl implements SongDAO{
 		song.setAlbum(new AlbumDAOImpl().loadAlbumNoSongs(song.getAlbum().getId()));
 		song.setArtist(new ArtistDAOImpl().loadArtistNoSongs(song.getArtist().getId()));
 		return song;
+	}
+	
+	private List<Song> addDetails(List<Song> songs){
+		if (songs == null) return null;
+		for (Song song:songs){
+			addDetails(song);
+		}
+		return songs;
 	}
 	
 	private Song readSongHasAlbum(ResultSet set) throws SQLException{
@@ -185,6 +193,7 @@ public class SongDAOImpl implements SongDAO{
 		return sql;
 	}
 	
+	@Override
 	public List<Song> findSongsByTitle(String name, int numberResult, int page){
 		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
@@ -204,6 +213,7 @@ public class SongDAOImpl implements SongDAO{
 		return songs;
 	}
 	
+	@Override
 	public List<Song> findSongsByArtistName(String name, int numberResult, int page){
 		List<Artist> artists = new ArtistDAOImpl().findArtistsByName(name);
 		List<Song> songs = new ArrayList<Song>();
@@ -223,6 +233,7 @@ public class SongDAOImpl implements SongDAO{
 		return songs;
 	}
 	
+	@Override
 	public List<Song> findSongsByAlbumName(String name, int numberResult, int page){
 		List<Album> albums = new AlbumDAOImpl().findAlbumsByName(name);
 		List<Song> songs = new ArrayList<Song>();
