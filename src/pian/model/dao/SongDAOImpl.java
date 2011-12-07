@@ -77,21 +77,13 @@ public class SongDAOImpl implements SongDAO{
 	}
 
 
-	public List<Song> getSongsByAlbum(Album album) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Song> getSongsByAlbum(Album album, int numberResult, int page) {
+		return getSongsByAlbum(album.getId(), numberResult, page);
 	}
 
 
-	public List<Song> getSongsByArtist(Artist artist) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public List<Song> getSongsByAlbum(String albumName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Song> getSongsByArtist(Artist artist, int numberResult, int page) {
+		return getSongsByArtist(artist.getId(), numberResult, page);
 	}
 
 	@Override
@@ -178,5 +170,62 @@ public class SongDAOImpl implements SongDAO{
 			sql +=";";
 		}
 		return sql;
+	}
+	
+	public List<Song> findSongsByTitle(String name, int numberResult, int page){
+		Connection connection = ConnectionFactory.getConnection();
+		List<Song> songs = new ArrayList<Song>();
+		try {
+			String sql = "SELECT * FROM Song WHERE Title LIKE '%?%'";
+			PreparedStatement statement = connection.prepareStatement(sqlWithLimit(sql, numberResult, page));
+			statement.setString(1, name);
+			ResultSet set = statement.executeQuery();
+			while (set.next()){
+				songs.add(readSongAll(set));
+			}
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return songs;
+	}
+	
+	public List<Song> findSongsByArtistName(String name, int numberResult, int page){
+		List<Artist> artists = new ArtistDAOImpl().findArtistsByName(name);
+		List<Song> songs = new ArrayList<Song>();
+		int sumSongs = page * numberResult;
+		for (Artist artist : artists){
+			if (numberResult == -1){
+				songs.addAll(getSongsByArtist(artist, -1, 1));
+			}else{
+				if (songs.size() < sumSongs){
+					songs.addAll(getSongsByArtist(artist, -1, 1));
+				}else{
+					songs = songs.subList((sumSongs - numberResult), numberResult);
+					break;
+				}
+			}
+		}
+		return songs;
+	}
+	
+	public List<Song> findSongsByAlbumName(String name, int numberResult, int page){
+		List<Album> albums = new AlbumDAOImpl().findAlbumsByName(name);
+		List<Song> songs = new ArrayList<Song>();
+		int sumSongs = page * numberResult;
+		for (Album album : albums){
+			if (numberResult == -1){
+				songs.addAll(getSongsByAlbum(album, -1, 1));
+			}else{
+				if (songs.size() < sumSongs){
+					songs.addAll(getSongsByAlbum(album, -1, 1));
+				}else{
+					songs = songs.subList((sumSongs - numberResult), numberResult);
+					break;
+				}
+			}
+		}
+		return songs;
 	}
 }

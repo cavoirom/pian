@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import pian.model.Album;
 import pian.model.Artist;
 
 public class ArtistDAOImpl implements ArtistDAO{
@@ -111,6 +114,25 @@ public class ArtistDAOImpl implements ArtistDAO{
 			return null;
 		artist.setSongs(new SongDAOImpl().getSongsByArtist(artist.getId(), 20, 1));
 		return artist;
+	}
+	
+	public List<Artist> findArtistsByName(String name){
+		Connection connection = ConnectionFactory.getConnection();
+		List<Artist> artists = new ArrayList<Artist>();
+		try {
+			String sql = "SELECT * FROM Artist WHERE Name LIKE %?%;";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			ResultSet set = statement.executeQuery();
+			if (set.next()){
+				artists.add(readArtist(set));
+			}
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return artists;
 	}
 
 }

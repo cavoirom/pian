@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import pian.model.Album;
 
@@ -88,5 +90,24 @@ public class AlbumDAOImpl implements AlbumDAO{
 			return null;
 		album.setSongs(new SongDAOImpl().getSongsByAlbum(album.getId(), 20, 1));
 		return album;
+	}
+	
+	public List<Album> findAlbumsByName(String name){
+		Connection connection = ConnectionFactory.getConnection();
+		List<Album> albums = new ArrayList<Album>();
+		try {
+			String sql = "SELECT * FROM Album WHERE Name LIKE %?%;";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			ResultSet set = statement.executeQuery();
+			if (set.next()){
+				albums.add(readAlbum(set));
+			}
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return albums;
 	}
 }
