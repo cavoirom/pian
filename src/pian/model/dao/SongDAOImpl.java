@@ -210,7 +210,7 @@ public class SongDAOImpl implements SongDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return songs;
+		return addDetails(songs);
 	}
 	
 	@Override
