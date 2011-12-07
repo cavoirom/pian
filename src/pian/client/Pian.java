@@ -1,11 +1,14 @@
 package pian.client;
 
+import java.util.Iterator;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -21,6 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Pian implements EntryPoint {
 	private VerticalPanel pageContainer = new VerticalPanel();
+	private VerticalPanel pageContainerLogin = new VerticalPanel();
 	
 	private SuggestBox searchBox = new SuggestBox();
 	private Button searchButton = new Button("Tìm nhạc");
@@ -43,6 +47,12 @@ public class Pian implements EntryPoint {
 	private VerticalPanel playlistPanel = new VerticalPanel();
 	private Label playlistLabel = new Label("Playlist của bạn");
 	
+	// upload.........................................................................TT
+	private Login login = new Login();
+	private Upload upload = new Upload();
+	private Button uploadButton = new Button("Upload");
+	// end upload.....................................................................TT
+	
 	
 	@Override
 	public void onModuleLoad() {
@@ -53,12 +63,31 @@ public class Pian implements EntryPoint {
 		searchBox.setWidth("300px");
 		
 		searchButton.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+
 		
 		// add searchBox and searchButton to its panel.
 		controlPanel.setBorderWidth(0);
 		controlPanel.setWidth("400px");
 		controlPanel.add(searchBox);
 		controlPanel.add(searchButton);
+		
+		// add upload >>> pageContainerLogin...................................TT
+		pageContainerLogin.add(login);
+		//add uploadButton >>> controlpanel.........and add event..............TT
+		uploadButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+//				pageContainer.setVisible(false);
+				RootPanel.get("pageContainer").remove(0);
+				RootPanel.get("pageContainerLogin").add(pageContainerLogin,Window.getClientWidth()/4, Window.getClientHeight()/4);
+				
+			}
+		});
+		controlPanel.add(uploadButton);
+		
+		
+		
 		
 		// add options to its panel.
 		optionPanel.add(controlPanel, DockPanel.NORTH);
@@ -129,8 +158,12 @@ public class Pian implements EntryPoint {
 		pageContainer.add(searchPanel);
 		pageContainer.add(resultPanel);
 		
+		
+		// add upload...........................................................TT
+		
 		// Associate the pageContainer with the RootPanel to display it.
-		RootPanel.get().add(pageContainer);
+		RootPanel.get("pageContainer").add(pageContainer);
+		
 		
 		// move cursor focus to the input box.
 		searchBox.setFocus(true);
