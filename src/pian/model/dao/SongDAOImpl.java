@@ -48,7 +48,7 @@ public class SongDAOImpl implements SongDAO{
 			if (set.next()){
 				ret = set.getInt(1);
 			}
-			connection.close();
+//			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
