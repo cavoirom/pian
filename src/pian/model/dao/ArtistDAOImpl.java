@@ -10,19 +10,29 @@ import java.util.List;
 import pian.model.Artist;
 
 public class ArtistDAOImpl implements ArtistDAO{
+	
+	private Connection connection;
+	
+	public ArtistDAOImpl(){
+		this.connection = ConnectionFactory.getConnection();
+	}
+	
+	public ArtistDAOImpl(Connection connection){
+		this.connection = connection;
+	}
 
 	@Override
 	public boolean storeArtist(Artist a) {
 		if (existArtist(a) || a == null)
 			return false;
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "INSERT INTO Artist (Name) VALUES(?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, a.getName());
 			statement.executeUpdate();
 			statement.close();
-			connection.close();
+//			//connection.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -36,7 +46,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 	}
 	
 	public Artist loadArtistNoSongs(int id) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
 			String sql = "SELECT * FROM Artist WHERE ID = ?;";
@@ -47,7 +57,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 				artist = readArtist(set);
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -56,14 +66,14 @@ public class ArtistDAOImpl implements ArtistDAO{
 
 	@Override
 	public boolean deleteArtist(int id) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "DELETE FROM Artist WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			int ret = statement.executeUpdate();
 			statement.close();
-			connection.close();
+			//connection.close();
 			if (ret >=1){
 				return true;
 			}
@@ -84,7 +94,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 	}
 	
 	public Artist loadArtistNoSongs(String name) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
 			String sql = "SELECT * FROM Artist WHERE Name = ?;";
@@ -95,7 +105,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 				readArtist(set);
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -113,12 +123,12 @@ public class ArtistDAOImpl implements ArtistDAO{
 	private Artist addSongs(Artist artist){
 		if (artist == null)
 			return null;
-		artist.setSongs(new SongDAOImpl().getSongsByArtist(artist.getId(), 20, 1));
+		artist.setSongs(new SongDAOImpl(connection).getSongsByArtist(artist.getId(), 20, 1));
 		return artist;
 	}
 	
 	public List<Artist> findArtistsByName(String name){
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		List<Artist> artists = new ArrayList<Artist>();
 		try {
 			String sql = "SELECT * FROM Artist WHERE Name LIKE ?;";
@@ -129,7 +139,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 				artists.add(readArtist(set));
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -137,7 +147,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 	}
 	
 	public Artist getArtistByName(String name){
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		Artist artist = null;
 		try {
 			String sql = "SELECT * FROM Artist WHERE Name = ?;";
@@ -148,7 +158,7 @@ public class ArtistDAOImpl implements ArtistDAO{
 				artist = readArtist(set);
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -158,5 +168,12 @@ public class ArtistDAOImpl implements ArtistDAO{
 	private boolean existArtist(Artist artist){
 		if (artist == null) return false;
 		return (getArtistByName(artist.getName()) != null);
+	}
+	
+	public void closeConnection(){
+		try {
+			connection.close();
+		} catch (SQLException e) {
+		}
 	}
 }

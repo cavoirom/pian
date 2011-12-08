@@ -10,9 +10,9 @@ public class Test {
 		Album album =  new Album("album1");
 		album.setArtist(artist);
 		Song song = new Song("Title 1", artist, "Cộng hòa xã hội chủ nghĩa", album);
-		System.out.println(new SongDAOImpl().storeDAO(song));
-		System.out.println(new SongDAOImpl().loadSong(1).getLink());
-		System.out.println(new SongDAOImpl().loadSong(1).getAlbum().getName());
+		System.out.println(new SongDAOImpl().storeSong(song));
+		System.out.println(new SongDAOImpl().loadSong(12).getLink());
+		System.out.println(new SongDAOImpl().loadSong(12).getAlbum().getName());
 		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getTitle());
 		System.out.println(new SongDAOImpl().findSongsByArtistName("artist", 1, 1).get(0).getArtist().getName());
 		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getAlbum().getName());

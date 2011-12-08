@@ -10,13 +10,23 @@ import java.util.List;
 import pian.model.Album;
 
 public class AlbumDAOImpl implements AlbumDAO{
+	
+	private Connection connection;
+	
+	public AlbumDAOImpl(){
+		this.connection = ConnectionFactory.getConnection();
+	}
+	
+	public AlbumDAOImpl(Connection connection){
+		this.connection = connection;
+	}
 
 	@Override
 	public boolean storeAlbum(Album a) {
 		if (existAlbum(a) || a == null)
 			return false;
-		new ArtistDAOImpl().storeArtist(a.getArtist());
-		Connection connection = ConnectionFactory.getConnection();
+		new ArtistDAOImpl(connection).storeArtist(a.getArtist());
+//		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "INSERT INTO Album (ArtistID, Name) VALUES(?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -24,7 +34,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 			statement.setString(2, a.getName());
 			statement.executeUpdate();
 			statement.close();
-			connection.close();
+			//connection.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -38,7 +48,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 	}
 	
 	public Album loadAlbumNoSongs(int id) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		Album album = null;
 		try {
 			String sql = "SELECT * FROM Album WHERE ID = ?;";
@@ -49,7 +59,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 				album = readAlbum(set);
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -58,14 +68,14 @@ public class AlbumDAOImpl implements AlbumDAO{
 
 	@Override
 	public boolean deleteAlbum(int id) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "DELETE FROM Album WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			int ret = statement.executeUpdate();
 			statement.close();
-			connection.close();
+			//connection.close();
 			if (ret >=1){
 				return true;
 			}
@@ -91,12 +101,12 @@ public class AlbumDAOImpl implements AlbumDAO{
 	private Album addSongs(Album album){
 		if (album == null)
 			return null;
-		album.setSongs(new SongDAOImpl().getSongsByAlbum(album.getId(), 20, 1));
+		album.setSongs(new SongDAOImpl(connection).getSongsByAlbum(album.getId(), 20, 1));
 		return album;
 	}
 	
 	public List<Album> findAlbumsByName(String name){
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		List<Album> albums = new ArrayList<Album>();
 		try {
 			String sql = "SELECT * FROM Album WHERE Name LIKE ?;";
@@ -107,7 +117,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 				albums.add(readAlbum(set));
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -115,7 +125,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 	}
 	
 	public Album getAlbumByName(String name){
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		Album album = null;
 		try {
 			String sql = "SELECT * FROM Album WHERE Name = ?;";
@@ -126,7 +136,7 @@ public class AlbumDAOImpl implements AlbumDAO{
 				album = readAlbum(set);
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -136,5 +146,12 @@ public class AlbumDAOImpl implements AlbumDAO{
 	private boolean existAlbum(Album album){
 		if (album == null) return false;
 		return (getAlbumByName(album.getName()) != null);
+	}
+	
+	public void closeConnection(){
+		try {
+			connection.close();
+		} catch (SQLException e) {
+		}
 	}
 }
