@@ -262,7 +262,8 @@ public class SongDAOImpl implements SongDAO{
 			}else{
 				if (songs.size() < sumSongs){
 					songs.addAll(getSongsByAlbum(album, -1, 1));
-				}else{
+				}
+				if (songs.size() >= sumSongs){
 					songs = songs.subList((sumSongs - numberResult), sumSongs);
 					break;
 				}
