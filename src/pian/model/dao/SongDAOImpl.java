@@ -241,8 +241,9 @@ public class SongDAOImpl implements SongDAO{
 			}else{
 				if (songs.size() < sumSongs){
 					songs.addAll(getSongsByArtist(artist, -1, 1));
-				}else{
-					songs = songs.subList((sumSongs - numberResult - 1), sumSongs - 1);
+				}
+				if (songs.size() >= sumSongs){
+					songs = songs.subList((sumSongs - numberResult), sumSongs);
 					break;
 				}
 			}
@@ -262,7 +263,7 @@ public class SongDAOImpl implements SongDAO{
 				if (songs.size() < sumSongs){
 					songs.addAll(getSongsByAlbum(album, -1, 1));
 				}else{
-					songs = songs.subList((sumSongs - numberResult - 1), sumSongs - 1);
+					songs = songs.subList((sumSongs - numberResult), sumSongs);
 					break;
 				}
 			}

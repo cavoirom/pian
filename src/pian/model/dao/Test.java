@@ -13,8 +13,8 @@ public class Test {
 		System.out.println(new SongDAOImpl().storeSong(song));
 		System.out.println(new SongDAOImpl().loadSong(12).getLink());
 		System.out.println(new SongDAOImpl().loadSong(12).getAlbum().getName());
-		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getTitle());
-		System.out.println(new SongDAOImpl().findSongsByArtistName("artist", 1, 1).get(0).getArtist().getName());
+		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 10, 1).size());
+		System.out.println(new SongDAOImpl().findSongsByArtistName("artist", 5, 1).size());
 		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getAlbum().getName());
 	}
 }
