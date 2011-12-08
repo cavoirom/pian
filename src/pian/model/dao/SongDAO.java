@@ -1,5 +1,6 @@
 package pian.model.dao;
 
+import java.io.InputStream;
 import java.util.List;
 
 import pian.model.Song;
@@ -22,4 +23,8 @@ public interface SongDAO {
 	public List<Song> findSongsByArtistName(String name, int numberResult, int page);
 	
 	public List<Song> findSongsByTitle(String name, int numberResult, int page);
+	
+	public InputStream play(int songID);
+	
+	public boolean upload(int songID, InputStream in);
 }

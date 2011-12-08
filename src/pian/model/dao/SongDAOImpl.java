@@ -297,7 +297,7 @@ public class SongDAOImpl implements SongDAO{
 			if (set.next()){
 				return set.getBinaryStream("Resource");
 			}
-			statement.close();
+//			statement.close();
 //			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
