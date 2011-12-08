@@ -10,4 +10,6 @@ public interface AlbumDAO {
 	public boolean deleteAlbum(int id);
 	
 	public boolean deleteAlbum(Album a);
+	
+	public void closeConnection();
 }

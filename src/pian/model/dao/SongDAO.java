@@ -27,4 +27,6 @@ public interface SongDAO {
 	public InputStream play(int songID);
 	
 	public boolean upload(int songID, InputStream in);
+	
+	public void closeConnection();
 }
