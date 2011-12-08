@@ -272,13 +272,13 @@ public class SongDAOImpl implements SongDAO{
 		return songs;
 	}
 	
-	public boolean upload(int songID, InputStream in){
+	public boolean upload(int songID, byte[] data){
 //		Connection connection = ConnectionFactory.getConnection();
 		boolean ret = false;
 		try {
 			String sql = "UPDATE Song SET Resource = ? WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setBlob(1, in);
+			statement.setBytes(1, data);
 			statement.setInt(2, songID);
 			ret = statement.executeUpdate() > 0;
 			statement.close();
@@ -289,7 +289,7 @@ public class SongDAOImpl implements SongDAO{
 		return ret;
 	}
 	
-	public InputStream play(int songID){
+	public byte[] play(int songID){
 //		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "SELECT (Resource) FROM Song WHERE ID = ?;";
@@ -297,7 +297,7 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(1, songID);
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
-				return set.getBinaryStream("Resource");
+				return set.getBytes("Resource");
 			}
 //			statement.close();
 //			//connection.close();

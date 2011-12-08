@@ -24,9 +24,9 @@ public interface SongDAO {
 	
 	public List<Song> findSongsByTitle(String name, int numberResult, int page);
 	
-	public InputStream play(int songID);
+	public byte[] play(int songID);
 	
-	public boolean upload(int songID, InputStream in);
+	public boolean upload(int songID, byte[] data);
 	
 	public void closeConnection();
 }
