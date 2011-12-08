@@ -24,14 +24,14 @@ public class Pian implements EntryPoint {
 	private VerticalPanel pageContainer = new VerticalPanel();
 	
 	private SuggestBox searchBox = new SuggestBox();
-	private Button searchButton = new Button("Tìm nhạc");
+	private Button submitButton = new Button("Tìm nhạc");
 	private CheckBox allOptionCheckBox = new CheckBox("Tất cả");
 	private CheckBox titleCheckBox = new CheckBox("Bài hát");
 	private CheckBox artistCheckBox = new CheckBox("Ca sĩ");
 	private CheckBox albumCheckBox = new CheckBox("Album");
 	private Image logoImage = new Image();
 	private DockPanel searchPanel = new DockPanel();
-	private HorizontalPanel controlPanel = new HorizontalPanel();
+	private HorizontalPanel commandPanel = new HorizontalPanel();
 	private DockPanel optionPanel = new DockPanel();
 	
 	private DockPanel resultPanel = new DockPanel();
@@ -46,22 +46,25 @@ public class Pian implements EntryPoint {
 	
 	@Override
 	public void onModuleLoad() {
-		/* render full search box. */
+		/* Begin - SEACH BOX */
+		// logo in the left of search box.
 		logoImage.setUrl("images/logo.jpg");
 		logoImage.setSize("115px", "110px");
 		
+		// input keyword here
 		searchBox.setWidth("300px");
 		
-		searchButton.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+		// start search on click
+		submitButton.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 		
-		// add searchBox and searchButton to its panel.
-		controlPanel.setBorderWidth(0);
-		controlPanel.setWidth("400px");
-		controlPanel.add(searchBox);
-		controlPanel.add(searchButton);
+		// add searchBox and submitButton to its container panel.
+		commandPanel.setBorderWidth(0);
+		commandPanel.setWidth("400px");
+		commandPanel.add(searchBox);
+		commandPanel.add(submitButton);
 			
-		// add options to its panel.
-		optionPanel.add(controlPanel, DockPanel.NORTH);
+		// search options here.
+		optionPanel.add(commandPanel, DockPanel.NORTH);
 		optionPanel.add(allOptionCheckBox, DockPanel.WEST);
 		optionPanel.add(titleCheckBox, DockPanel.WEST);
 		optionPanel.add(artistCheckBox, DockPanel.WEST);
@@ -71,7 +74,7 @@ public class Pian implements EntryPoint {
 		searchPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 		searchPanel.add(logoImage, DockPanel.WEST);
 		searchPanel.add(optionPanel, DockPanel.EAST);
-		/* render full search box. */
+		/* End - SEACH BOX */
 		
 		/* Test result panel */
 		allResultPanel.setSpacing(5);
@@ -79,16 +82,17 @@ public class Pian implements EntryPoint {
 		allResultPanel.add(renderCellPanel("http://stream.mp3.zdn.vn/fsfsdfdsfdserwrwq3/4bf90c3cf20967f828e3d33e2e774d74/4eccd9c0/d/cc/dcc132fbbc40e0d1c12c28523249bb91.mp3", "Vài Lần Đón Đưa", "Lê Hiếu", "ab001", "Đang cập nhật"));
 		/* Test result panel */
 		
-		/* render result box. */
+		/* Begin - SONG PANEL */
+		// This panel display the list of songs match the search keyword
 		songPanel.setWidth("700px");
 		songPanel.add(allResultPanel, "Tất cả");
 		songPanel.add(songResultPanel, "Tựa đề");
 		songPanel.add(artistResultPanel, "Ca sĩ");
 		songPanel.add(albumResultPanel, "Album");
 		songPanel.selectTab(0);
+		/* End - SONG PANEL */
 		
-		
-		
+		/* Begin - PLAYER PANEL */
 		playerPanel.setPixelSize(280, 30);
 		playerPanel.add(new HTML("<div id=\"mainPlayer\">Loading the player ...</div>"));
 		playerPanel.addAttachHandler(new Handler() {
@@ -99,21 +103,14 @@ public class Pian implements EntryPoint {
 				
 			}
 		});
-		/*playerPanel.add(new HTML("<embed "+
-				"flashvars=\"file=http://media.vinahoo.com/secdl/1752f958c3cc8fdd1798dbc19758a530/4eccb263/bbmp3/music/2010/10/11/GBC1Q9.mp3\" " +
-				"allowfullscreen=\"false\" " +
-				"allowscripaccess=\"always\" " +
-				"id=\"player1\" " +
-				"name=\"player1\" " +
-				"src=\"player/player.swf\" " +
-				"width=\"270\" " +
-				"height=\"24\" " +
-				"/>"));*/
+		/* End - PLAYER PANEL */
 		
+		/* Begin - PLAYLIST PANEL */
 		playlistPanel.setWidth("280px");
 		playlistPanel.add(playlistLabel);
+		/* End - PLAYLIST PANEL */
 		
-		// Associate the songPanel, playerPanel, playlistPanel with the searchPanel.
+		// Associate the songPanel, playerPanel, playlistPanel with the resultPanel.
 		resultPanel.setWidth("980px");
 		resultPanel.setHeight("100%");
 		resultPanel.setSpacing(5);
@@ -168,7 +165,7 @@ public class Pian implements EntryPoint {
 		return cellPanel;
 	}
 	
-	public static native void renderPlayer() /*-{
+	private static native void renderPlayer() /*-{
 		$wnd.jwplayer("mainPlayer").setup({
 			flashplayer: "/player/player.swf",
 			//file: "http://stream3.mp3.zdn.vn/ES3stAYFQh/452b03c7ccc92e8bc7b50838207651e2/4eccceb0/2011/11/22/5/2/52e7b9a0ee8627037ca3a2a8235012fe.mp3",
@@ -178,7 +175,7 @@ public class Pian implements EntryPoint {
 		});
 	}-*/;
 	
-	public static native void playSong(String url) /*-{
+	private static native void playSong(String url) /*-{
 		$wnd.jwplayer("mainPlayer").load(url);
 		$wnd.jwplayer("mainPlayer").play();
 		//alert(url);
