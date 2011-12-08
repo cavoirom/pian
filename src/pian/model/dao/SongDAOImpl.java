@@ -1,9 +1,11 @@
 package pian.model.dao;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,16 +14,26 @@ import pian.model.Artist;
 import pian.model.Song;
 
 public class SongDAOImpl implements SongDAO{
+	private Connection connection;
+	
+	public SongDAOImpl(){
+		this.connection = ConnectionFactory.getConnection();
+	}
+	
+	public SongDAOImpl(Connection connection){
+		this.connection = connection;
+	}
 
 	@Override
-	public boolean storeDAO(Song s) {
-		if (s == null) return false;
-		new ArtistDAOImpl().storeArtist(s.getArtist());
-		new AlbumDAOImpl().storeAlbum(s.getAlbum());
-		int albumID = new AlbumDAOImpl().getAlbumByName(s.getAlbum().getName()).getId();
-		int artistID = new ArtistDAOImpl().getArtistByName(s.getArtist().getName()).getId();
-		Connection connection = ConnectionFactory.getConnection();
+	public int storeSong(Song s) {
+		int ret = 0;
+		if (s == null) return 0;
+//		Connection connection = ConnectionFactory.getConnection();
 		try {
+			new ArtistDAOImpl(connection).storeArtist(s.getArtist());
+			new AlbumDAOImpl(connection).storeAlbum(s.getAlbum());
+			int albumID = new AlbumDAOImpl(connection).getAlbumByName(s.getAlbum().getName()).getId();
+			int artistID = new ArtistDAOImpl(connection).getArtistByName(s.getArtist().getName()).getId();
 			String sql = "INSERT INTO Song (Title, Link, AlbumID, ArtistID) VALUES(?,?,?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, s.getTitle());
@@ -30,17 +42,22 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(4, artistID);
 			statement.executeUpdate();
 			statement.close();
+			sql = "SELECT last_insert_rowid();";
+			Statement sta = connection.createStatement();
+			ResultSet set = sta.executeQuery(sql);
+			if (set.next()){
+				ret = set.getInt(1);
+			}
 			connection.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return ret;
 	}
 
 	@Override
 	public Song loadSong(int id) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		Song song = null;
 		try {
 			String sql = "SELECT * FROM Song WHERE ID = ?;";
@@ -51,7 +68,7 @@ public class SongDAOImpl implements SongDAO{
 				song = readSongAll(result);
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +77,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public boolean deleteSong(int id) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "DELETE FROM Song WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -93,7 +110,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public List<Song> getSongsByAlbum(int albumID, int numberResult, int page) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			String sql = "SELECT * FROM Song WHERE AlbumID = ?";
@@ -104,7 +121,7 @@ public class SongDAOImpl implements SongDAO{
 				songs.add(readSongAll(set));
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -113,7 +130,7 @@ public class SongDAOImpl implements SongDAO{
 
 	@Override
 	public List<Song> getSongsByArtist(int artistID, int numberResult, int page) {
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			String sql = "SELECT * FROM Song WHERE ArtistID = ?";
@@ -124,7 +141,7 @@ public class SongDAOImpl implements SongDAO{
 				songs.add(readSongAll(set));
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -145,8 +162,8 @@ public class SongDAOImpl implements SongDAO{
 	private Song addDetails(Song song){
 		if (song == null)
 			return null;
-		song.setAlbum(new AlbumDAOImpl().loadAlbumNoSongs(song.getAlbum().getId()));
-		song.setArtist(new ArtistDAOImpl().loadArtistNoSongs(song.getArtist().getId()));
+		song.setAlbum(new AlbumDAOImpl(connection).loadAlbumNoSongs(song.getAlbum().getId()));
+		song.setArtist(new ArtistDAOImpl(connection).loadArtistNoSongs(song.getArtist().getId()));
 		return song;
 	}
 	
@@ -195,7 +212,7 @@ public class SongDAOImpl implements SongDAO{
 	
 	@Override
 	public List<Song> findSongsByTitle(String name, int numberResult, int page){
-		Connection connection = ConnectionFactory.getConnection();
+//		Connection connection = ConnectionFactory.getConnection();
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			String sql = "SELECT * FROM Song WHERE Title LIKE ?";
@@ -206,7 +223,7 @@ public class SongDAOImpl implements SongDAO{
 				songs.add(readSongAll(set));
 			}
 			statement.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -215,7 +232,7 @@ public class SongDAOImpl implements SongDAO{
 	
 	@Override
 	public List<Song> findSongsByArtistName(String name, int numberResult, int page){
-		List<Artist> artists = new ArtistDAOImpl().findArtistsByName(name);
+		List<Artist> artists = new ArtistDAOImpl(connection).findArtistsByName(name);
 		List<Song> songs = new ArrayList<Song>();
 		int sumSongs = page * numberResult;
 		for (Artist artist : artists){
@@ -235,7 +252,7 @@ public class SongDAOImpl implements SongDAO{
 	
 	@Override
 	public List<Song> findSongsByAlbumName(String name, int numberResult, int page){
-		List<Album> albums = new AlbumDAOImpl().findAlbumsByName(name);
+		List<Album> albums = new AlbumDAOImpl(connection).findAlbumsByName(name);
 		List<Song> songs = new ArrayList<Song>();
 		int sumSongs = page * numberResult;
 		for (Album album : albums){
@@ -251,5 +268,47 @@ public class SongDAOImpl implements SongDAO{
 			}
 		}
 		return songs;
+	}
+	
+	public boolean upload(int songID, InputStream in){
+//		Connection connection = ConnectionFactory.getConnection();
+		boolean ret = false;
+		try {
+			String sql = "UPDATE Song SET Resource = ? WHERE ID = ?;";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setBlob(1, in);
+			statement.setInt(2, songID);
+			ret = statement.executeUpdate() > 0;
+			statement.close();
+			//connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public InputStream play(int songID){
+//		Connection connection = ConnectionFactory.getConnection();
+		try {
+			String sql = "SELECT (Resource) FROM Song WHERE ID = ?;";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, songID);
+			ResultSet set = statement.executeQuery();
+			if (set.next()){
+				return set.getBinaryStream("Resource");
+			}
+			statement.close();
+//			//connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void closeConnection(){
+		try {
+			connection.close();
+		} catch (SQLException e) {
+		}
 	}
 }
