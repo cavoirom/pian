@@ -1,4 +1,6 @@
-package pian.client;
+package simpleUpload.client;
+
+import pian.client.Pian;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -15,8 +17,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 
 public class Login extends DialogBox {
-
-	public Login() {
+	
+	
+	public Login(final Upload upload) {
+		
 		
 		FlexTable flexTable = new FlexTable();
 		setWidget(flexTable);
@@ -50,9 +54,9 @@ public class Login extends DialogBox {
 			public void onClick(ClickEvent event) {
 				if(textBox.getText().trim().equalsIgnoreCase("admin") && 
 						passwordTextBox.getText().trim().equalsIgnoreCase("admin")){
-					Upload upload = new Upload();
-					RootPanel.get("pageContainerLogin").remove(0);
-					RootPanel.get("pageContainerLogin").add(upload);
+					RootPanel.get("pageLogin").clear();
+				upload.upload();	
+				
 					
 				}
 				
@@ -61,25 +65,7 @@ public class Login extends DialogBox {
 //		btnBack.setText("\u0110\u0103ng Nh\u00E2\u0323p");
 		flexTable.setWidget(3, 0, dangnhapButton);
 		dangnhapButton.setSize("116px", "44px");
-		
-		
-		
-		Button thoatButton = new Button("Thoát");
-		thoatButton.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				Pian pian = new Pian();
-				RootPanel.get("pageContainerLogin").remove(0);
-				pian.onModuleLoad();
-//				RootPanel.get("pageContainer").add(pian.);
-			}
-		});
-		flexTable.setWidget(3, 1, thoatButton);
-		thoatButton.setSize("133px", "47px");
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
 	}
 
 }
