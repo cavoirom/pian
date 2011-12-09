@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
 <Context path="/dbcp" docBase="dbcp">
 	<Resource name="jdbc/PianDB" auth="Container" 
 	type="javax.sql.DataSource"
 		removeAbandoned="true" removeAbandonedTimeout="30" 
 		maxActive="100"
-		maxIdle="30" maxWait="10000" username="" password=""
-		driverClassName="org.sqlite.JDBC" 
-		url="jdbc:sqlite:pian.sqlite"/>
+		maxIdle="30" maxWait="10000" username="pian" password="pian"
+		driverClassName="com.mysql.jdbc.Driver" 
+		url="jdbc:mysql://127.0.0.1:3306/pian?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"/>
 </Context>

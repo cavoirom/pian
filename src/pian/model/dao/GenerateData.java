@@ -107,7 +107,7 @@ public class GenerateData {
 		SongDAO songDao = new SongDAOImpl();
 		for (int i=0;i < links.length; i++){
 			int id = songDao.storeSong(songs.get(i));
-			songDao.upload(id, GenerateData.getBytesFromFile(new File(links[i])));
+			songDao.upload(id, new FileInputStream(links[i]));
 			System.out.println("---------Done---------" + links[i]);
 		}
 		songDao.closeConnection();

@@ -42,7 +42,8 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(4, artistID);
 			statement.executeUpdate();
 			statement.close();
-			sql = "SELECT last_insert_rowid();";
+//			sql = "SELECT last_insert_rowid();";
+			sql = "SELECT LAST_INSERT_ID()";
 			Statement sta = connection.createStatement();
 			ResultSet set = sta.executeQuery(sql);
 			if (set.next()){
@@ -272,13 +273,13 @@ public class SongDAOImpl implements SongDAO{
 		return songs;
 	}
 	
-	public boolean upload(int songID, byte[] data){
+	public boolean upload(int songID, InputStream in){
 //		Connection connection = ConnectionFactory.getConnection();
 		boolean ret = false;
 		try {
 			String sql = "UPDATE Song SET Resource = ? WHERE ID = ?;";
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setBytes(1, data);
+			statement.setBlob(1, in);
 			statement.setInt(2, songID);
 			ret = statement.executeUpdate() > 0;
 			statement.close();
@@ -289,7 +290,8 @@ public class SongDAOImpl implements SongDAO{
 		return ret;
 	}
 	
-	public byte[] play(int songID){
+	@Override
+	public InputStream download(int songID){
 //		Connection connection = ConnectionFactory.getConnection();
 		try {
 			String sql = "SELECT (Resource) FROM Song WHERE ID = ?;";
@@ -297,7 +299,7 @@ public class SongDAOImpl implements SongDAO{
 			statement.setInt(1, songID);
 			ResultSet set = statement.executeQuery();
 			if (set.next()){
-				return set.getBytes("Resource");
+				return set.getBinaryStream("Resource");
 			}
 //			statement.close();
 //			//connection.close();

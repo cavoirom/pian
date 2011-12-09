@@ -7,12 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import pian.client.SuggestKeywordService;
 import pian.model.dao.ConnectionFactory;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class SuggestKeywordServiceImpl extends RemoteServiceServlet implements
 		SuggestKeywordService {	
