@@ -12,7 +12,7 @@ import java.sql.Statement;
 public class InitDatabase {
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 		Class.forName("org.sqlite.JDBC");
-	    Connection connection = DriverManager.getConnection("jdbc:sqlite:pian.sqlite");
+	    Connection connection = DriverManager.getConnection("jdbc:sqlite:war/pian.sqlite");
 	    Statement stat = connection.createStatement();
 	    String tableSong = "CREATE TABLE Song(ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Link TEXT, AlbumID int, ArtistID int, Resource BLOP);";
 	    String tableAlbum = "CREATE TABLE Album(ID INTEGER PRIMARY KEY AUTOINCREMENT, ArtistID int, Name TEXT);";

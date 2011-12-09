@@ -5,7 +5,7 @@
 		type="javax.sql.DataSource" 
 		maxActive="100" maxIdle="30" maxWait="10000" 
 		driverClassName="org.sqlite.JDBC" 
-		url="jdbc:sqlite:pian.sqlite" 
+		url="jdbc:sqlite:war/pian.sqlite" 
 		removeAbandoned="true" removeAbandonedTimeout="60" 
 	/> 
 </Context> 

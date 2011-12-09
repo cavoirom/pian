@@ -21,7 +21,7 @@ public class ConnectionFactory {
 			//System.out.println("Can't connect as connection pool. System will create a normal connection.");
 			try {
 				Class.forName("org.sqlite.JDBC");
-				connection = DriverManager.getConnection("jdbc:sqlite:pian.sqlite");
+				connection = DriverManager.getConnection("jdbc:sqlite:war/pian.sqlite");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
