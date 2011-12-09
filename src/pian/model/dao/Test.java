@@ -9,12 +9,13 @@ public class Test {
 		Artist artist = new Artist("Lam Trường");
 		Album album =  new Album("album1");
 		album.setArtist(artist);
-		Song song = new Song("Tôi Ngàn Năm Đợi", artist, "#Unlink", album);
-		//System.out.println(new SongDAOImpl().storeSong(song));
-		System.out.println(new SongDAOImpl().loadSong(13).getLink());
-		System.out.println(new SongDAOImpl().loadSong(13).getAlbum().getName());
-		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getTitle());
-		System.out.println(new SongDAOImpl().findSongsByArtistName("artist", 1, 1).get(0).getArtist().getName());
-		System.out.println(new SongDAOImpl().findSongsByTitle("Title", 1, 1).get(0).getAlbum().getName());
+		Song song = new Song("Title 1", artist, "Cộng hòa xã hội chủ nghĩa", album);
+//		System.out.println(new SongDAOImpl().storeSong(song));
+		System.out.println(new SongDAOImpl().loadSong(12).getLink());
+		System.out.println(new SongDAOImpl().loadSong(12).getAlbum().getName());
+		System.out.println(new SongDAOImpl().findSongsByTitle("Anh khac hay em khac", -1, 1).size());
+		System.out.println(new SongDAOImpl().findSongsByArtistName("Khac", 5, 1).size());
+		System.out.println(new SongDAOImpl().findSongsByTitle("Noi Dau", 1, 1).get(0).getLink());
+		byte[] in = new SongDAOImpl().play(1);
 	}
 }

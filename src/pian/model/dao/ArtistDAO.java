@@ -10,4 +10,6 @@ public interface ArtistDAO {
 	public boolean deleteArtist(int id);
 	
 	public boolean deleteArtist(Artist a);
+	
+	public void closeConnection();
 }

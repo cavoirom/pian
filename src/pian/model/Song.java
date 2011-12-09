@@ -44,6 +44,9 @@ public class Song {
 	}
 
 	public Artist getArtist() {
+		if (artist == null){
+			artist = new Artist("Chưa rõ");
+		}
 		return artist;
 	}
 
@@ -60,6 +63,9 @@ public class Song {
 	}
 
 	public Album getAlbum() {
+		if (album == null){
+			album = new Album("Chưa rõ", getArtist());
+		}
 		return album;
 	}
 
