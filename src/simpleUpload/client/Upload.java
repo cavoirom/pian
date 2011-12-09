@@ -15,6 +15,10 @@
  */
 package simpleUpload.client;
 
+import java.awt.Color;
+
+import javax.jws.soap.SOAPBinding.Style;
+
 import gwtupload.client.IUploader;
 import gwtupload.client.SingleUploader;
 import gwtupload.client.SingleUploaderModal;
@@ -23,40 +27,36 @@ import gwtupload.client.IUploader.UploadedInfo;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Upload implements EntryPoint {
+		
 
 	  public void onModuleLoad() {
-	    // Attach the image viewer to the document
-	   // RootPanel.get("thumbnails").add(panelImages);
+	   Login login = new Login(this);
+	   login.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
+	   login.setPopupPosition(Window.getClientWidth()/4,Window.getClientHeight()/4);
+	   RootPanel.get("pageLogin").add(login);
+	   
 	    
-	    SingleUploader single1 = new SingleUploaderModal();
-	    single1.addOnFinishUploadHandler(onFinishUploaderHandler);
-	    
-	    // This enables php apc progress mechanism
-	    single1.add(new Hidden("APC_UPLOAD_PROGRESS", single1.getInputName()), 0);
-	    single1.avoidEmptyFiles(false);
-	    RootPanel.get("single1").add(single1);
-
-	    // Add a finish handler which will load the image once the upload finishes
-	    single1.addOnFinishUploadHandler(onFinishUploaderHandler);
+		 
 	  }
 
 	  // Load the image in the document and in the case of success attach it to the viewer
 	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 	    public void onFinish(IUploader uploader) {
 	      if (uploader.getStatus() == gwtupload.client.IUploadStatus.Status.SUCCESS) {
-
-	    	  RootPanel.get("finish").add(new Label("upload finish"));
-	        
+  		        
 	        // The server sends useful information to the client by default
 	        UploadedInfo info = uploader.getServerInfo();
 	        System.out.println("File name " + info.name);
@@ -68,4 +68,32 @@ public class Upload implements EntryPoint {
 	      }
 	    }
 	  };
+	  public void upload(){
+		  Label label = new Label("Begin upload music");
+		  
+		  SingleUploader single1 = new SingleUploaderModal();
+		    single1.addOnFinishUploadHandler(onFinishUploaderHandler);
+		   
+		    // This enables php apc progress mechanism
+		    single1.add(new Hidden("APC_UPLOAD_PROGRESS", single1.getInputName()), 0);
+		    single1.avoidEmptyFiles(false);
+		    FormUpload uploadForm =new FormUpload();
+		   
+		    uploadPanel.setBorderWidth(0);
+		    uploadPanel.setWidth("100%");
+		    uploadPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		    uploadPanel.setSpacing(10);
+		    
+		    uploadPanel.add(label);
+		    uploadPanel.add(single1);
+		    uploadPanel.add(uploadForm);
+//		    RootPanel.get("single1").clear();
+		    RootPanel.get("single1").add(uploadPanel);
+		    
+
+		    // Add a finish handler which will load the image once the upload finishes
+		    single1.addOnFinishUploadHandler(onFinishUploaderHandler);
+	  }
+	  private VerticalPanel uploadPanel = new VerticalPanel();
+	  
 }
