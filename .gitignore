@@ -2,6 +2,7 @@
 .project
 .settings
 gwt-unitCache
+pian.sqlite
 test/*
 test-classes/*
 war/js/jquery.min.js
@@ -9,3 +10,4 @@ war/pian
 war/WEB-INF/classes/*
 war/WEB-INF/deploy
 war/WEB-INF/lib/*
+war/pian.sqlite
