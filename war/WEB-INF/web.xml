@@ -10,10 +10,18 @@
   	<servlet-name>suggestKeyword</servlet-name>
   	<servlet-class>pian.server.SuggestKeywordServiceImpl</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>suggestKeyword</servlet-name>
   	<url-pattern>/pian/suggestKeyword</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>loadSongServlet</servlet-name>
+  	<servlet-class>pian.server.LoadSongServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>loadSongServlet</servlet-name>
+  	<url-pattern>/pian/loadSong</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

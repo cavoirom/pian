@@ -4,8 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -30,23 +28,28 @@ public class LoadSongServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		int songId = 0;
-		if (request.getAttribute("id") != null) {
+		if (request.getParameter("id") != null) {
 			songId = Integer.parseInt(request.getParameter("id"));
-			
+			System.out.println(songId);
 			try {
 				Connection connection = ConnectionFactory.getConnection();
+				connection.setReadOnly(true);
 				
-				BufferedInputStream bis = new BufferedInputStream(
-						new ByteArrayInputStream(new SongDAOImpl(connection).play(songId)));
+				byte[] resource = new SongDAOImpl(connection).play(songId);
+				System.out.println(resource.length);
+				
+				ByteArrayInputStream bais = new ByteArrayInputStream(resource);
+				BufferedInputStream bis = new BufferedInputStream(bais);
 				BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
 				
-				int read;
-				byte[] array = new byte[1024];
-				while ((read = bis.read(array)) != -1) {
-					bos.write(array, 0, read);
+				int readed = -1;
+				byte[] buff = new byte[10240];
+				while ((readed = bis.read(buff)) != -1){
+					bos.write(buff,0,readed);
 				}
-				
+				bos.flush();
 				bos.close();
+				bais.close();
 				bis.close();
 				connection.close();
 			} catch (IOException e) {
