@@ -18,14 +18,13 @@ public class ConnectionFactory {
 			DataSource ds = (DataSource)envContext.lookup("jdbc/PianDB");
 			connection = ds.getConnection();
 		} catch (Exception e) {
-//			System.out.println("Can't connect as connection pool. System will create a normal connection.");
+			//System.out.println("Can't connect as connection pool. System will create a normal connection.");
 			try {
 				Class.forName("org.sqlite.JDBC");
 				connection = DriverManager.getConnection("jdbc:sqlite:pian.sqlite");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-		    
 		} 
 		return connection;
 	}

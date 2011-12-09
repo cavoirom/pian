@@ -6,6 +6,15 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  <servlet>
+  	<servlet-name>suggestKeyword</servlet-name>
+  	<servlet-class>pian.server.SuggestKeywordServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>suggestKeyword</servlet-name>
+  	<url-pattern>/pian/suggestKeyword</url-pattern>
+  </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>

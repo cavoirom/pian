@@ -1,14 +1,19 @@
 package pian.client;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Collection;
+
+import pian.model.Song;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -16,6 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -27,6 +33,9 @@ public class Pian implements EntryPoint {
 	private DockPanel resultPanel = new DockPanel();
 	private HorizontalPanel footerPanel = new HorizontalPanel();
 	
+	private MultiWordSuggestOracle keywordOracle = new MultiWordSuggestOracle();
+	private SuggestBox searchBox = new SuggestBox(keywordOracle);
+	
 	@Override
 	public void onModuleLoad() {
 		/* Begin - SEACH BOX */
@@ -35,9 +44,20 @@ public class Pian implements EntryPoint {
 		logoImage.setUrl("images/logo.jpg");
 		logoImage.setSize("115px", "110px");
 		
+		// test suggest keyword oracle
+		//keywordOracle.add("Áo Lụa Hà Đông");
+		//keywordOracle.add("Vài Lần Đón Đưa");
+		
 		// input keyword here
-		SuggestBox searchBox = new SuggestBox();
 		searchBox.setWidth("300px");
+		searchBox.setLimit(10);
+		searchBox.addKeyDownHandler(new KeyDownHandler(){
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				event.stopPropagation();
+				requestSuggestKeyword();
+			}
+		});
 		
 		// start search on click
 		Button submitButton = new Button("Tìm nhạc");
@@ -96,13 +116,13 @@ public class Pian implements EntryPoint {
 		VerticalPanel albumResultPanel = new VerticalPanel();
 		
 		// add above panels into container tab
-		TabPanel songPanel = new TabPanel();
-		songPanel.setWidth("700px");
-		songPanel.add(allResultPanel, "Tất cả");
-		songPanel.add(songResultPanel, "Tựa đề");
-		songPanel.add(artistResultPanel, "Ca sĩ");
-		songPanel.add(albumResultPanel, "Album");
-		songPanel.selectTab(0);
+		TabPanel songListPanel = new TabPanel();
+		songListPanel.setWidth("700px");
+		songListPanel.add(allResultPanel, "Tất cả");
+		songListPanel.add(songResultPanel, "Tựa đề");
+		songListPanel.add(artistResultPanel, "Ca sĩ");
+		songListPanel.add(albumResultPanel, "Album");
+		songListPanel.selectTab(0);
 		/* End - SONG PANEL */
 		
 		/* Begin - PLAYER PANEL */
@@ -132,7 +152,7 @@ public class Pian implements EntryPoint {
 		resultPanel.setWidth("980px");
 		resultPanel.setHeight("100%");
 		resultPanel.setSpacing(5);
-		resultPanel.add(songPanel, DockPanel.WEST);
+		resultPanel.add(songListPanel, DockPanel.WEST);
 		resultPanel.add(playerPanel, DockPanel.NORTH);
 		resultPanel.add(playlistPanel, DockPanel.NORTH);
 		
@@ -141,9 +161,8 @@ public class Pian implements EntryPoint {
 		/* End - RESULT PANEL */
 		
 		/* Begin - FOOTER PANEL */
-		
 		footerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-		footerPanel.add(new HTML("&copy;2011 by Hữu Phong, Đỗ Tâm, cavoirom"));
+		footerPanel.add(new HTML("&copy;2011 by Hữu Phong, Đỗ Tâm, Xuân Vinh"));
 		/* End - FOOTER PANEL */
 		
 		// Associate the searchPanel, resultPanel, footerPanel with the pageContainer.
@@ -185,4 +204,34 @@ public class Pian implements EntryPoint {
 		$wnd.jwplayer("mainPlayer").play();
 		//alert(url);
 	}-*/;
+	
+	private void requestSuggestKeyword() {
+		// Initialize the service proxy class
+		SuggestKeywordServiceAsync suggestKeywordServ = GWT.create(SuggestKeywordService.class);
+		
+		AsyncCallback<Collection<String>> callback = new AsyncCallback<Collection<String>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(Collection<String> result) {
+				// TODO Auto-generated method stub
+				updateSuggestKeywordOracle(result);
+			}
+		};
+		
+		// Make the call to the stock price service.
+		suggestKeywordServ.getSuggestKeyword(searchBox.getValue(), callback);
+	}
+	
+	private void updateSuggestKeywordOracle(Collection<String> suggestKeyword) {
+		keywordOracle.clear();
+		if(suggestKeyword != null) {
+			keywordOracle.addAll(suggestKeyword);
+		}
+	}
 }
