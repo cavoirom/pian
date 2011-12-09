@@ -14,7 +14,7 @@ public class Test {
 		album.setArtist(artist);
 		Song song = new Song("Title 1", artist, "Cộng hòa xã hội chủ nghĩa", album);
 		System.out.println(new SongDAOImpl().storeSong(song));
-//		System.out.println(new SongDAOImpl().loadSong(12).getLink());
+		System.out.println(new SongDAOImpl().loadSong(1).getLink());
 //		System.out.println(new SongDAOImpl().loadSong(12).getAlbum().getName());
 //		System.out.println(new SongDAOImpl().findSongsByTitle("Anh khac hay em khac", -1, 1).size());
 //		System.out.println(new SongDAOImpl().findSongsByArtistName("Khac", 5, 1).size());

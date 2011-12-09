@@ -45,7 +45,7 @@ public class ConnectionFactory {
 	static {
 		ConnectionFactory.dataSourceName = "jdbc/PianDB";
 		ConnectionFactory.driverName = "com.mysql.jdbc.Driver";
-		ConnectionFactory.url = "jdbc:mysql://127.0.0.1:3306/pian";
+		ConnectionFactory.url = "jdbc:mysql://127.0.0.1:3306/pian?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true";
 		ConnectionFactory.username = "root";
 		ConnectionFactory.password = "";
 		try {
