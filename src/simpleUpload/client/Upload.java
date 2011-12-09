@@ -35,8 +35,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class Upload implements EntryPoint {
 
 	  public void onModuleLoad() {
-	    // Attach the image viewer to the document
-	   // RootPanel.get("thumbnails").add(panelImages);
+	   
 	    
 	    SingleUploader single1 = new SingleUploaderModal();
 	    single1.addOnFinishUploadHandler(onFinishUploaderHandler);

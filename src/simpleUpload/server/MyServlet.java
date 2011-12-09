@@ -42,7 +42,7 @@ public class MyServlet extends UploadAction {
 	          // File file = File.createTempFile("upload-", ".bin", new File("/tmp"));
 	          
 	          /// Create a temporary file placed in the default system temp folder
-//	          File file = File.createTempFile(item.getName(), ".mp3");
+
 	        	File file = new File(".//Music//"+item.getName());
 	          item.write(file);
 	          
