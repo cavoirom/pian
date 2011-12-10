@@ -6,5 +6,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("suggestKeyword")
 public interface SuggestKeywordService extends RemoteService {
-	public Collection<String> getSuggestKeyword(String kw);
+	public Collection<String> getSuggestKeyword();
 }

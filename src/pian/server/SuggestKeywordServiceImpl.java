@@ -22,16 +22,15 @@ public class SuggestKeywordServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Collection<String> getSuggestKeyword(String kw) {
+	public Collection<String> getSuggestKeyword() {
 		Collection<String> suggestKeyword = new ArrayList<String>();
 		
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			connection.setReadOnly(true);
 			
-			String query = "SELECT Title FROM Song WHERE Title LIKE ?";
+			String query = "SELECT Title FROM Song;";
 			PreparedStatement stm = connection.prepareStatement(query);
-			stm.setString(1, "%"+kw+"%");
 			
 			ResultSet result = stm.executeQuery();
 			

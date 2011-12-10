@@ -51,13 +51,14 @@ public class Pian implements EntryPoint {
 		// input keyword here
 		searchBox.setWidth("300px");
 		searchBox.setLimit(10);
-		searchBox.addKeyDownHandler(new KeyDownHandler(){
+		requestSuggestKeyword();
+		/*searchBox.addKeyDownHandler(new KeyDownHandler(){
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				event.stopPropagation();
 				requestSuggestKeyword();
 			}
-		});
+		});*/
 		
 		// start search on click
 		Button submitButton = new Button("Tìm nhạc");
@@ -225,7 +226,7 @@ public class Pian implements EntryPoint {
 		};
 		
 		// Make the call to the stock price service.
-		suggestKeywordServ.getSuggestKeyword(searchBox.getValue(), callback);
+		suggestKeywordServ.getSuggestKeyword(callback);
 	}
 	
 	private void updateSuggestKeywordOracle(Collection<String> suggestKeyword) {

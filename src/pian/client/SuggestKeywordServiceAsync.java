@@ -7,5 +7,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface SuggestKeywordServiceAsync {
 	
-	public void getSuggestKeyword(String kw, AsyncCallback<Collection<String>> callback);
+	public void getSuggestKeyword(AsyncCallback<Collection<String>> callback);
 }
