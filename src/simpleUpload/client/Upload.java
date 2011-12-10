@@ -15,21 +15,13 @@
  */
 package simpleUpload.client;
 
-import java.awt.Color;
-
-import javax.jws.soap.SOAPBinding.Style;
-
 import gwtupload.client.IUploader;
+import gwtupload.client.IUploader.UploadedInfo;
 import gwtupload.client.SingleUploader;
 import gwtupload.client.SingleUploaderModal;
-import gwtupload.client.IUploader.UploadedInfo;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;

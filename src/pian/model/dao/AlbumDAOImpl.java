@@ -25,18 +25,20 @@ public class AlbumDAOImpl implements AlbumDAO{
 	public boolean storeAlbum(Album a) {
 		if (existAlbum(a) || a == null)
 			return false;
-		new ArtistDAOImpl(connection).storeArtist(a.getArtist());
+		
 //		Connection connection = ConnectionFactory.getConnection();
 		try {
+			new ArtistDAOImpl(connection).storeArtist(a.getArtist());
+			int artistID = new ArtistDAOImpl().getArtistByName(a.getArtist().getName()).getId();
 			String sql = "INSERT INTO Album (ArtistID, Name) VALUES(?,?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, a.getArtist().getId());
+			statement.setInt(1, artistID);
 			statement.setString(2, a.getName());
 			statement.executeUpdate();
 			statement.close();
 			//connection.close();
 			return true;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		return false;
