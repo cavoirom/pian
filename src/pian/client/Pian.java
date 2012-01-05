@@ -40,9 +40,9 @@ public class Pian implements EntryPoint {
 	public void onModuleLoad() {
 		/* Begin - SEACH BOX */
 		// logo in the left of search box.
-		Image logoImage = new Image();
-		logoImage.setUrl("images/logo.jpg");
-		logoImage.setSize("115px", "110px");
+		//Image logoImage = new Image();
+		//logoImage.setUrl("images/logo.jpg");
+		//logoImage.setSize("115px", "110px");
 		
 		// test suggest keyword oracle
 		//keywordOracle.add("Áo Lụa Hà Đông");
